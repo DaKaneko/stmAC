@@ -7,7 +7,7 @@ from ocs.matched_client import MatchedClient
 def main():
     '''Stimulator AC supply client'''
     
-    stmac_client = MatchedClient('pcr500')
+    stmac_client = MatchedClient('pcr')
     status, message, session = stmac_client.get_values(channel=0)
     print(status, message)
     print(session['data'])

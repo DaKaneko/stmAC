@@ -7,10 +7,6 @@ from time import sleep
 import sys
 import vxi11
 
-WaitTimeStep  = 15.  # Seconds (same as PB2)
-WaitTimeForce = 10.
-WaitTimeEmerg = 5.
-VoltStep   = 1.      # Minimum step sige to change voltage (integer)
 VoltLimit  = 51.     # Safety limit for too high voltage
 SwitchLimit = 5.     # Safety limit to turn on or off heater
 
@@ -26,8 +22,6 @@ class PCR500MA:
       except:
           print("device not found", tempser)
           #sleep(0.05)
-
-      #self.checkID()
 
    def __w(self, data):
        self.instr.write(data)
@@ -66,7 +60,9 @@ class PCR500MA:
       return power
 
    def setVoltage(self,volt):
-      if(self.Voltage-volt > SwitchLimit or volt-self.Voltage > SwitchLimit):
+      if(volt > voltLimit or
+         self.Voltage-volt > SwitchLimit or
+         volt-self.Voltage > SwitchLimit):
           print("It is dangerous!")
           return
       self.Voltage = volt

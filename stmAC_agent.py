@@ -11,10 +11,8 @@ from kikusuiPCR import PCR500MA
 IPADDR_DEFAULT = "169.254.140.171"
 WaitTimeStep  = 15.  # Seconds (same as PB2)
 WaitTimeForce = 10.
-WaitTimeEmerg = 5.
 VoltStep   = 1.      # Minimum step sige to change voltage (integer)
 VoltLimit  = 51.     # Safety limit for too high voltage
-SwitchLimit = 5.     # Safety limit to turn on or off heater
 
 class StmACAgent:
     '''
@@ -40,6 +38,7 @@ class StmACAgent:
 
     def init_pcr500(self, session, params=None):
         '''Initialization of pcr500 AC supply
+        '''
         if self.initialized:
             return True, "Already initialized."
 
@@ -104,12 +103,12 @@ class StmACAgent:
 
 
     def set_values(self, session, params=None):
-        '''A task to set sensor parameters for a MAX31856 device
+        '''A task to set sensor parameters for AC supply
         '''
         pass
         
     def get_values(self, session, params=None):
-        '''A task to provide configuration information'''
+        '''A task to provide configuration information
         '''
         pass
     
@@ -144,7 +143,7 @@ class StmACAgent:
         print("Reached to ", self.Voltage)
       
     def forceZero(self): #for site work
-        while(self.Voltage > 1.0):
+        while(self.Voltage > VoltStep):
             self.Voltage = self.Voltage - VoltStep
             print("go down to ", self.Voltage)
             self._pcr.setVoltage(self, self.Voltage)
@@ -152,7 +151,7 @@ class StmACAgent:
 
         print("set to 0 Volt")
         self.Voltage = 0.0
-        self._pcr.setVoltage('SOUR:VOLT 0.0')
+        self._pcr.setVoltage(0.0)
 
 def main():
     '''Boot OCS agent'''
